@@ -1,28 +1,77 @@
 # -*- coding: utf-8 -*-
-#TODO : class화 
+#TODO : class화
 #TODO : exif 지원기능 추가
 #TODO : DB sqllite3
 #TODO : DB mysql
 #TODO : DB mongodb
+#TODO : using SQLAlchemy
 #TODO : app-engine
 #TODO : django
 import sys, urllib.request, os,sqlite3
 from bs4 import BeautifulSoup
+from datetime import datetime
 
-def connectSqlite3():
-	con = None
-	try:
-		con = sqlite3.connect('photo-of-the-day.db')
-		cur = con.cursor()    
-		cur.execute('SELECT SQLITE_VERSION()')  
-		data = cur.fetchone() 
-	except sqlite3.Error:
-		print ("Error %s:" % e.args[0])
-		sys.exit(1)
-	finally:
-		if con:
-			con.close()
-	return con
+class Sqlite3:
+	db_name='photo-of-the-day.db'
+	table_name='photo_of_the_day'
+	data=None
+	con=None
+
+	def connectSqlite3(self):
+		con = None
+		targetTable=None
+		try:
+			con = sqlite3.connect(self.db_name)
+			cur = con.cursor()    
+			cur.execute('SELECT SQLITE_VERSION()') 
+			cur.execute("CREATE TABLE "+self.table_name+"(Id INTEGER PRIMARY KEY,title TEXT,caption TEXT, publication_time TEXT,credit TEXT,previous TEXT,download_link TEXT,image_description TEXT,html TEXT, flag NUMERIC,created_at TEXT)")
+			cur.execute("CREATE UNIQUE INDEX I_ID on"+self.table_name+"(id asc)" )
+			cur.execute("CREATE INDEX I_CREATED_AT on"+self.table_name+"(created_at asc)" )
+			cur.execute("CREATE INDEX I_FLAG_AT on"+self.table_name+"(flag asc)" )
+		except sqlite3.OperationalError:
+			cur.execute("select count(*) from "+self.table_name)
+		#finally:
+		#	if con:
+		#		con.close()
+		self.con=con
+
+	def insertData(self):
+		data=self.data
+		#print(self.data)
+		cur = self.con.cursor()   
+		cur.execute("select max(Id) from "+ self.table_name)
+		result = cur.fetchone()
+		print(result)
+		Id=result[0]
+		if(result[0]==None):
+			Id=0
+		'''print(data['caption'])
+		print(data['publication_time'])
+		print(data['title'])
+		print(data['credit'])
+		print(data['previous'])
+		print(data['download_link'])
+		print(data['image_description'])'''
+		#cur.execute("INSERT INTO "+self.table_name+" VALUES("+Id+",'"+data['caption']+"','"+data['publication_time']+"','"+data['title']+"','"+data['credit']+"','"+data['previous']+"','"+data['download_link']+"','"+data['image_description']+"',0,0)")
+		
+		data['Id']=Id
+		data['flag']=0
+		data['created_at']=datetime.now()	
+
+		#print(data)
+		cur.execute("INSERT INTO "+self.table_name+" VALUES(?,?,?,?,?,?,?,?,?,?,?)",(int(data['Id']),str(data['title']),str(data['caption']),str(data['publication_time']),str(data['credit']),str(data['previous']),str(data['download_link']),str(data['image_description']),str(data['html']),int(data['flag']),str(data['created_at'])))
+
+		#cur.execute("INSERT INTO "+self.table_name+" VALUES("+str(Id)+",'"+str(data['caption'])+"','"+str(data['publication_time'])+"','"+str(data['title'])+"','"+str(data['credit'])+"','"+str(data['previous'])+"','"+str(data['download_link'])+"','"+str(data['image_description'])+"',0,0)")
+		#cur.execute("INSERT INTO "+self.table_name+" VALUES(0,'caption','publication_time','title','credit','"+data['previous']+"','"+data['download_link']+"','"+data['image_description']+"',0,0)")
+	#def updateData(self,targetTable,field,data):
+		#return ""
+	#def removeData(self,targetTable,field,data):
+		#return ""
+	#def save(self):
+		#return ""
+	#def delete(self):
+		#return ""
+
 
 class PhotoOfTheDay():
 	url_prefix = "http://photography.nationalgeographic.com"
@@ -76,6 +125,12 @@ def main():
 	pod.parseHtml()
 	pod.store_images()
 	print(pod.info)
+	lite=Sqlite3()
+	lite.data=pod.data
+	lite.connectSqlite3()
+	#print(lite.data)
+	lite.insertData()
+	#lite.prepareTables()
 	#pod.connectSqlite3()
 
 	#
