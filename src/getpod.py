@@ -42,9 +42,6 @@ class Sqlite3:
 		cur.execute("select max(Id) from "+ self.table_name)
 		result = cur.fetchone()
 		print(result)
-		Id=result[0]
-		if(result[0]==None):
-			Id=0
 		'''print(data['caption'])
 		print(data['publication_time'])
 		print(data['title'])
@@ -52,17 +49,14 @@ class Sqlite3:
 		print(data['previous'])
 		print(data['download_link'])
 		print(data['image_description'])'''
-		#cur.execute("INSERT INTO "+self.table_name+" VALUES("+Id+",'"+data['caption']+"','"+data['publication_time']+"','"+data['title']+"','"+data['credit']+"','"+data['previous']+"','"+data['download_link']+"','"+data['image_description']+"',0,0)")
-		
-		data['Id']=Id
+
 		data['flag']=0
 		data['created_at']=datetime.now()	
 
 		#print(data)
-		cur.execute("INSERT INTO "+self.table_name+" VALUES(?,?,?,?,?,?,?,?,?,?,?)",(int(data['Id']),str(data['title']),str(data['caption']),str(data['publication_time']),str(data['credit']),str(data['previous']),str(data['download_link']),str(data['image_description']),str(data['html']),int(data['flag']),str(data['created_at'])))
+		cur.execute("INSERT INTO "+self.table_name+"(title,caption,publication_time,credit,previous,download_link,image_description,html,flag,created_at) VALUES(?,?,?,?,?,?,?,?,?,?)",(str(data['title']),str(data['caption']),str(data['publication_time']),str(data['credit']),str(data['previous']),str(data['download_link']),str(data['image_description']),str(data['html']),int(data['flag']),str(data['created_at'])))
+		self.con.commit()
 
-		#cur.execute("INSERT INTO "+self.table_name+" VALUES("+str(Id)+",'"+str(data['caption'])+"','"+str(data['publication_time'])+"','"+str(data['title'])+"','"+str(data['credit'])+"','"+str(data['previous'])+"','"+str(data['download_link'])+"','"+str(data['image_description'])+"',0,0)")
-		#cur.execute("INSERT INTO "+self.table_name+" VALUES(0,'caption','publication_time','title','credit','"+data['previous']+"','"+data['download_link']+"','"+data['image_description']+"',0,0)")
 	#def updateData(self,targetTable,field,data):
 		#return ""
 	#def removeData(self,targetTable,field,data):
