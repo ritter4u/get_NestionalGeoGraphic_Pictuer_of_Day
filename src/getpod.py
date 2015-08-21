@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# TODO : class화
+# TODO : 세련된 class화
 # TODO : exif 지원기능 추가
 # TODO : DB sqllite3
 # TODO : DB mysql
