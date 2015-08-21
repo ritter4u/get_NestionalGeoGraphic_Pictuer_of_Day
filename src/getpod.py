@@ -12,7 +12,7 @@ from bs4 import BeautifulSoup
 from datetime import datetime
 
 
-class Sqlite3:
+class DbSqlite3:
     db_name = 'photo-of-the-day.db'
     table_name = 'photo_of_the_day'
     data = None
@@ -124,12 +124,15 @@ class PhotoOfTheDay():
 #		return ""
 
 def main():
+    """
+    :rtype : object
+    """
     pod = PhotoOfTheDay()
     pod.getHtml()
     pod.parseHtml()
     pod.store_images()
     print(pod.info)
-    lite = Sqlite3()
+    lite = DbSqlite3()
     lite.data = pod.data
     lite.connectSqlite3()
     # print(lite.data)
