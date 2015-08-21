@@ -111,7 +111,9 @@ class PhotoOfTheDay():
         file_name = url.split('/')[-1]
         u = urllib.request.urlopen(url)
         meta = u.info()
-
+        directory = 'images'
+        if not os.path.exists(directory):
+            os.makedirs(directory)
         f = open('images/' + file_name, 'wb')
         f.write(u.read())
         f.close()
