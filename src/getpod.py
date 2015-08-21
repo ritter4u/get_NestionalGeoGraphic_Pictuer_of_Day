@@ -92,7 +92,7 @@ class PhotoOfTheDay():
         tmp = tmp.replace('\n', '')
         tmp = tmp.replace('&laquo;', '')
         tmp = tmp.replace('&raquo;', '')
-        soup = BeautifulSoup(tmp)
+        soup = BeautifulSoup(tmp, "html.parser")
         # soup.prettify()
         data['caption'] = soup.select("#caption").pop()
         data['publication_time'] = soup.select("#caption > .publication_time").pop()
@@ -115,7 +115,7 @@ class PhotoOfTheDay():
         f = open('images/' + file_name, 'wb')
         f.write(u.read())
         f.close()
-        self.info = {'filename': file_name, 'url': url}
+        self.info = {'filename': 'images/' + file_name, 'url': url}
 
 
 # def connectDB:
