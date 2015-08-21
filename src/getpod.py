@@ -131,6 +131,7 @@ def main():
     """
     :rtype : object
     """
+    # print (sys.argv[0])
     pod = PhotoOfTheDay()
     pod.getHtml()
     pod.parseHtml()
