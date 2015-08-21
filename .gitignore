@@ -30,4 +30,5 @@ SCCS
 _$*
 58964634-aac9-4f38-ab29-5d09f1d564d6.dmp
 /src/__pycache__
+/.settings
 *.db
