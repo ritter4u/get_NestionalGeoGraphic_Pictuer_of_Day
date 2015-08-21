@@ -33,35 +33,39 @@ class DbSqlite3:
         except sqlite3.OperationalError:
             cur.execute("select count(*) from " + self.table_name)
         # finally:
-        #	if con:
-        #		con.close()
+        #     if con:
+        #         con.close()
         self.con = con
 
     def insertData(self):
         data = self.data
         # print(self.data)
         cur = self.con.cursor()
-        cur.execute("select max(Id) from " + self.table_name)
-        result = cur.fetchone()
-        print(result)
-        '''print(data['caption'])
-		print(data['publication_time'])
-		print(data['title'])
-		print(data['credit'])
-		print(data['previous'])
-		print(data['download_link'])
-		print(data['image_description'])'''
-
-        data['flag'] = 0
-        data['created_at'] = datetime.now()
-
-        # print(data)
         cur.execute(
-            "INSERT INTO " + self.table_name + "(title,caption,publication_time,credit,previous,download_link,image_description,html,flag,created_at) VALUES(?,?,?,?,?,?,?,?,?,?)",
-            (str(data['title']), str(data['caption']), str(data['publication_time']), str(data['credit']),
-             str(data['previous']), str(data['download_link']), str(data['image_description']), str(data['html']),
-             int(data['flag']), str(data['created_at'])))
-        self.con.commit()
+            "select count(*) as cnt from " + self.table_name + " where download_link = '" + data['download_link'] + "'")
+        result = cur.fetchone()
+        if (result[0] <= 0):
+            cur.execute("select max(id) from " + self.table_name)
+            result = cur.fetchone()
+            print(result)
+            '''print(data['caption'])
+    		print(data['publication_time'])
+	    	print(data['title'])
+    		print(data['credit'])
+    		print(data['previous'])
+    		print(data['download_link'])
+    		print(data['image_description'])'''
+
+            data['flag'] = 0
+            data['created_at'] = datetime.now()
+
+            # print(data)
+            cur.execute(
+                "INSERT INTO " + self.table_name + "(title,caption,publication_time,credit,previous,download_link,image_description,html,flag,created_at) VALUES(?,?,?,?,?,?,?,?,?,?)",
+                (str(data['title']), str(data['caption']), str(data['publication_time']), str(data['credit']),
+                 str(data['previous']), str(data['download_link']), str(data['image_description']), str(data['html']),
+                 int(data['flag']), str(data['created_at'])))
+            self.con.commit()
 
         # def updateData(self,targetTable,field,data):
         # return ""
