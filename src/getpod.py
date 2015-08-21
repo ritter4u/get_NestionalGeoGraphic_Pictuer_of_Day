@@ -112,7 +112,7 @@ class PhotoOfTheDay():
         u = urllib.request.urlopen(url)
         meta = u.info()
 
-        f = open(file_name, 'wb')
+        f = open('images/' + file_name, 'wb')
         f.write(u.read())
         f.close()
         self.info = {'filename': file_name, 'url': url}
