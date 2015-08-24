@@ -11,7 +11,6 @@ import sys, urllib.request, os, sqlite3
 from bs4 import BeautifulSoup
 from datetime import datetime
 
-
 class DbSqlite3:
     db_name = 'photo-of-the-day.db'
     table_name = 'photo_of_the_day'
@@ -36,6 +35,20 @@ class DbSqlite3:
         #     if con:
         #         con.close()
         self.con = con
+
+    def getUnflaged(self):
+	    data = self.data
+	    cur = self.con.cursor()
+	    cur.execute(
+		    "select * from " + self.table_name + " where flag = '" + data['flag'] + "'")
+	    result = cur.fatchall()
+	    return result
+
+    # def setFlag(self):
+    #     data = self.data
+    #     cur =  self.con.cursor()
+    #     cur.execute(
+    #         "select * from " + self.table_name + " where flag = '" + data['flag'] + "'")
 
     def insertData(self):
         data = self.data
@@ -66,16 +79,6 @@ class DbSqlite3:
                  str(data['previous']), str(data['download_link']), str(data['image_description']), str(data['html']),
                  int(data['flag']), str(data['created_at'])))
             self.con.commit()
-
-        # def updateData(self,targetTable,field,data):
-        # return ""
-        # def removeData(self,targetTable,field,data):
-        # return ""
-        # def save(self):
-        # return ""
-        # def delete(self):
-        # return ""
-
 
 class PhotoOfTheDay():
     url_prefix = "http://photography.nationalgeographic.com"
