@@ -131,6 +131,7 @@ class PhotoOfTheDay():
 #		return ""
 
 def main():
+<<<<<<< HEAD
     """
     :rtype : object
     """
@@ -158,6 +159,43 @@ def main():
 # def initDatabase():
 
 # def store_to_database():
+=======
+	# print (sys.argv)
+	# if sys.argv[1]=='once':
+	# 	pod = PhotoOfTheDay()
+	# 	pod.getHtml()
+	# 	pod.parseHtml()
+	# 	pod.store_images()
+	# 	print(pod.info)
+	# 	lite=Sqlite3()
+	# 	lite.data=pod.data
+	# 	lite.connectSqlite3()
+	# 	#print(lite.data)
+	# 	lite.insertData()
+	# 	#lite.prepareTables()
+	# 	#pod.connectSqlite3()
+	# 	#
+	# 	#img = Image.open("test.jpg")
+	# 	#exif = i._getexif()
+	# 	# decode exif using TAGS
+	# else:
+	print ('all')
+	pod = PhotoOfTheDay()
+	pod.getHtml()
+	pod.parseHtml()
+	# pod.store_images()
+	print(pod.info)
+	lite=Sqlite3()
+	lite.data=pod.data
+	lite.connectSqlite3()
+	#print(lite.data)
+	lite.insertData()
+	# lite.selectOneData()
+
+#def initDatabase():
+
+#def store_to_database():
+>>>>>>> develop
 #	print('aa')
 
 if __name__ == "__main__":
